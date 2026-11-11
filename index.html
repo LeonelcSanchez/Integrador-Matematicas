@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiMath | Simulador de Costos y Producción</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1>OptiMath Studio</h1>
+            <p>Sistema de Optimización de Insumos y Rentabilidad mediante <strong>Matrices, Determinantes y Funciones</strong></p>
+        </div>
+    </header>
+
+    <main class="container dashboard">
+        <!-- SECCIÓN 1: MATRICES Y DETERMINANTES -->
+        <section class="card full-width">
+            <div class="card-header">
+                <h2>1. Planificación de Producción y Stock (Matrices y Determinantes)</h2>
+                <span class="badge">Álgebra Lineal</span>
+            </div>
+            <p class="section-desc">
+                Definí cuánto insumo consume cada servicio/producto (Matriz $A$) y tu stock total disponible (Vector $B$). El sistema aplica la <strong>Regla de Cramer</strong> para calcular cuántos trabajos exactos debés realizar para agotar el stock sin desperdicio, y utiliza <strong>Multiplicación de Matrices</strong> para comparar proveedores.
+            </p>
+
+            <div class="grid-matrices">
+                <!-- Matriz A y Vector B -->
+                <div class="matrix-box">
+                    <h3>Matriz de Consumo ($A_{3\times3}$) y Stock Disponible ($B_{3\times1}$)</h3>
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Insumo / Recurso</th>
+                                <th><input type="text" id="prod1_name" value="Lavado Premium" class="editable-header"></th>
+                                <th><input type="text" id="prod2_name" value="Pulido / Acrílico" class="editable-header"></th>
+                                <th><input type="text" id="prod3_name" value="Limpieza Interior" class="editable-header"></th>
+                                <th class="highlight-col">Stock Total ($B$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Shampoo / Desengrasante (Unid.)</strong></td>
+                                <td><input type="number" id="a00" value="2" step="any"></td>
+                                <td><input type="number" id="a01" value="1" step="any"></td>
+                                <td><input type="number" id="a02" value="1" step="any"></td>
+                                <td class="highlight-col"><input type="number" id="b0" value="45" step="any"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pasta / Sellador (Unid.)</strong></td>
+                                <td><input type="number" id="a10" value="1" step="any"></td>
+                                <td><input type="number" id="a11" value="3" step="any"></td>
+                                <td><input type="number" id="a12" value="1" step="any"></td>
+                                <td class="highlight-col"><input type="number" id="b1" value="55" step="any"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mano de Obra (Horas)</strong></td>
+                                <td><input type="number" id="a20" value="1" step="any"></td>
+                                <td><input type="number" id="a21" value="2" step="any"></td>
+                                <td><input type="number" id="a22" value="3" step="any"></td>
+                                <td class="highlight-col"><input type="number" id="b2" value="60" step="any"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Matriz C: Costos por Proveedor -->
+                <div class="matrix-box">
+                    <h3>Matriz de Costos Unitarios por Proveedor ($C_{3\times2}$)</h3>
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Insumo / Recurso</th>
+                                <th>Proveedor Mayorista ($)</th>
+                                <th>Proveedor Local ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Shampoo / Desengrasante</strong></td>
+                                <td><input type="number" id="c00" value="1500" step="any"></td>
+                                <td><input type="number" id="c01" value="1800" step="any"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pasta / Sellador</strong></td>
+                                <td><input type="number" id="c10" value="3200" step="any"></td>
+                                <td><input type="number" id="c11" value="3000" step="any"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Valor Hora Operario</strong></td>
+                                <td><input type="number" id="c20" value="2500" step="any"></td>
+                                <td><input type="number" id="c21" value="2500" step="any"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button id="btn-calcular-matrices" class="btn-primary">Resolver Matrices y Determinantes</button>
+                </div>
+            </div>
+
+            <!-- Resultados Matemáticos de Matrices -->
+            <div class="results-grid">
+                <div class="math-panel">
+                    <h4>Resolución por Determinantes (Regla de Cramer: $A \cdot X = B$)</h4>
+                    <div id="cramer-output" class="math-output"></div>
+                </div>
+                <div class="math-panel">
+                    <h4>Producto Matricial de Costos ($P = A^T \cdot C$)</h4>
+                    <div id="cost-matrix-output" class="math-output"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: FUNCIONES Y PUNTO DE EQUILIBRIO -->
+        <section class="card full-width">
+            <div class="card-header">
+                <h2>2. Proyección Financiera y Punto de Equilibrio (Funciones)</h2>
+                <span class="badge badge-alt">Análisis Matemático</span>
+            </div>
+            <p class="section-desc">
+                Modelado mediante funciones reales de variable real ($x$ = cantidad de unidades/servicios mensuales). Analiza la intersección entre la <strong>Función de Costo Total $C(x)$</strong> y la <strong>Función de Ingreso $I(x)$</strong>, además de optimizar una <strong>Función Cuadrática de Utilidad</strong> con desgaste operativo.
+            </p>
+
+            <div class="functions-layout">
+                <div class="controls-panel">
+                    <div class="form-group">
+                        <label for="select-product">Vincular costo unitario de:</label>
+                        <select id="select-product">
+                            <option value="0">Servicio 1 (Proveedor Mayorista)</option>
+                            <option value="1">Servicio 2 (Proveedor Mayorista)</option>
+                            <option value="2">Servicio 3 (Proveedor Mayorista)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="costo-fijo">Costos Fijos Mensuales $b$ ($):</label>
+                        <input type="number" id="costo-fijo" value="120000" step="1000">
+                        <small>Alquiler, luz, internet, monotributo.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="costo-variable">Costo Variable Unitario $m_c$ ($):</label>
+                        <input type="number" id="costo-variable" value="8700" step="100">
+                        <small>Extraído automáticamente de la matriz de costos o editable.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="precio-venta">Precio de Venta Unitario $m_i$ ($):</label>
+                        <input type="number" id="precio-venta" value="18000" step="500">
+                    </div>
+                    <div class="form-group">
+                        <label for="coef-cuadratico">Factor de Sobrecosto Operativo $a$ ($):</label>
+                        <input type="number" id="coef-cuadratico" value="85" step="5">
+                        <small>Para modelar utilidad cuadrática: $U(x) = -a x^2 + (m_i - m_c)x - b$</small>
+                    </div>
+                    <button id="btn-calcular-funciones" class="btn-primary">Graficar y Analizar Funciones</button>
+                </div>
+
+                <div class="chart-panel">
+                    <canvas id="functionsChart" width="650" height="360"></canvas>
+                    <div class="chart-legend">
+                        <span class="legend-item"><i class="dot cost-color"></i> Costo Lineal $C(x)$</span>
+                        <span class="legend-item"><i class="dot income-color"></i> Ingreso Lineal $I(x)$</span>
+                        <span class="legend-item"><i class="dot quad-color"></i> Utilidad Cuadrática $U(x)$</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="math-panel" style="margin-top: 1.5rem;">
+                <h4>Análisis Analítico de las Funciones (Dominio, Imagen, Raíces y Vértice)</h4>
+                <div id="functions-output" class="math-output grid-3"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
